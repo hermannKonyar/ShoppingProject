@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Data;
 using API.Entity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace API.Controllers
@@ -13,47 +15,34 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class ProductsController : ControllerBase
     {
+        private readonly DataContext _context;
+        public ProductsController(DataContext context)
+        {
+            _context = context;
+        }
         
         [HttpGet]
-        public IActionResult GetProducts()
+        public async Task<IActionResult> GetProducts()
         {
-            return Ok(new List<Product>
-            {
-                new Product
-                {
-                    Id = 1,
-                    Name = "iPhone 12",
-                    Description = "telefon açıklaması",
-                    ImageUrl = "1.jpeg",
-                    Price = 17000,
-                    IsActive = true,
-                    Stock = 100
-                },
-                new Product
-                {
-                    Id = 2,
-                    Name = "iPhone 13",
-                    Description = "telefon açıklaması",
-                    ImageUrl = "2.jpeg",
-                    Price = 20000,
-                    IsActive = true,
-                    Stock = 100
-                }
-            });
+            var products = await _context.Products.ToListAsync();
+            return Ok(products);
         }
 
 
 
         [HttpGet("{id}")]
-        public IActionResult GetProduct(int id) => Ok(new Product()
+        public async Task<IActionResult> GetProduct(int? id)
         {
-            Id = 1,
-            Name = "iPhone 12",
-            Description = "telefon açıklaması",
-            ImageUrl = "1.jpeg",
-            Price = 17000,
-            IsActive = true,
-            Stock = 100
-        });
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var product = await _context.Products.FindAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return Ok(product);
+        }
     }
 }

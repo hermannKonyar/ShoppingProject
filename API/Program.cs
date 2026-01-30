@@ -9,8 +9,11 @@ builder.Services.AddDbContext<DataContext>(options =>
 {
     var config = builder.Configuration;
     var connectionString = config.GetConnectionString("DefaultConnection");
-    options.UseSqlite(connectionString);    
+    options.UseSqlite(connectionString);
 });
+//Dışarıdan erişim izni vermek için
+builder.Services.AddCors();
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -25,6 +28,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+//Dışarıdan erişim izni vermek için
+app.UseCors(opt=>opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000"));
 
 app.UseAuthorization();
 

@@ -44,5 +44,13 @@ namespace API.Controllers
             }
             return Ok(product);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateProduct(Product product)
+        {
+            _context.Products.Add(product);
+            await _context.SaveChangesAsync();
+            return Ok(product);
+        }
     }
 }

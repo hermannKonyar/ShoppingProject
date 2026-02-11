@@ -1,5 +1,6 @@
 import { AddShoppingCart, Search} from "@mui/icons-material";
 import { Button, Card, CardActions, CardContent, CardMedia, Typography } from "@mui/material";
+import { Link } from "react-router";
 
 function Product({ product }: { product: any }) {
   return (
@@ -20,7 +21,7 @@ function Product({ product }: { product: any }) {
         </CardContent>
         <CardActions>
           <Button variant="outlined" size="small" startIcon={<AddShoppingCart  color="success" />}>Add to Cart</Button>
-          <Button variant="outlined" size="small" startIcon={<Search />} color="primary">View Details</Button>
+          <Button  component={Link} to={`/catalog/${product.id}`} variant="outlined" size="small" startIcon={<Search />} color="primary">View Details</Button>
         </CardActions>
       </Card>
     </>

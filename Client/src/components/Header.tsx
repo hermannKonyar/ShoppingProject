@@ -56,7 +56,7 @@ function Header() {
       <AppBar position="static" sx={{ mb: 4 }}>
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Typography variant="h6" sx={styles}>
+            <Typography component={NavLink} to={'/'} variant="h6" sx={styles}>
               E-Commerce
             </Typography>
             <List sx={{ display: "flex" }}>

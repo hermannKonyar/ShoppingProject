@@ -5,6 +5,7 @@ import AboutPage from "../pages/AboutPage";
 import ContactPage from "../pages/ContactPage";
 import CatalogPage from "../pages/catalog/CatalogPage";
 import ProductDetails from "../pages/catalog/ProductDetails";
+import ErrorPage from "../pages/ErrorPage";
 export const router = createBrowserRouter([
     {
         path: "/",
@@ -28,7 +29,11 @@ export const router = createBrowserRouter([
             {
                 path: "catalog/:id",
                 element: <ProductDetails />
-            }       
+            } ,    
+            {
+                path: "error",
+                element: <ErrorPage />
+            }   
         ]
     }
 ])

@@ -36,6 +36,10 @@ const links = [
     title: "Catalog",
     to: "/catalog",
   },
+  {
+    title: "Error",
+    to: "/error",
+  },
 ];
 
 const styles = {

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { IProducts } from "../../model/IProducts";
 import agent from "../../api/requests";
+import NotFound from "../../errors/NotFound";
 
 export default function ProductDetails() {
     const {id} = useParams<{id:string}>();
@@ -16,9 +17,8 @@ export default function ProductDetails() {
         })  
     },[id]);
     if(loading) return <CircularProgress/>;
-    if(!product) return <h1>Product not found</h1>;
+    if(!product) return <NotFound/>;
     return (
-      <>
         <Grid container spacing={2}>
           <Grid size={{ xl: 3, lg: 4, md: 5, xs: 12 }}>
             <img
@@ -53,6 +53,5 @@ export default function ProductDetails() {
             </TableContainer>
           </Grid>
         </Grid>
-      </>
     );
 }

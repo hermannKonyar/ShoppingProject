@@ -1,32 +1,40 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { IProducts } from "../model/IProducts";
 import { toast } from "react-toastify";
+import { router } from "../router/Routes";
 
 axios.defaults.baseURL = "http://localhost:5094/api/";
 
 axios.interceptors.response.use(
   (response) => response,
-  (error:AxiosError) => {
-    const {data, status} = error.response as AxiosResponse;
-    switch(status){
+  (error: AxiosError) => {
+    const { data, status } = error.response as AxiosResponse;
+    switch (status) {
       case 400:
+        if(data.errors){
+          const modelErrors:string[]=[];
+          for(const key in data.errors){
+            modelErrors.push(data.errors[key]);
+          }
+          throw modelErrors.flat();
+        }
         toast.error(data.title);
         break;
       case 401:
         toast.error(data.title);
         break;
       case 404:
-        toast.error(data.title);
+        router.navigate("/not-found",{state:{error:data}});
         break;
       case 500:
-        toast.error(data.title);
+        router.navigate("/server-error",{state:{error:data}});
         break;
       default:
         toast.error("Something went wrong");
         break;
     }
     return Promise.reject(error.response);
-  }
+  },
 );
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
@@ -55,7 +63,7 @@ const Errors = {
 
 const agent = {
   Catalog,
-  Errors
+  Errors,
 };
 
 export default agent;

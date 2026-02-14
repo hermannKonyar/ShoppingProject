@@ -15,7 +15,12 @@ builder.Services.AddDbContext<DataContext>(options =>
 //Dışarıdan erişim izni vermek için
 builder.Services.AddCors();
 
-builder.Services.AddControllers();
+//JsonOptions eklemek için
+//
+builder.Services.AddControllers().AddJsonOptions(opt => 
+{
+    opt.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

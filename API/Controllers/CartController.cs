@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Data;
+using API.DTO;
 using API.Entity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,11 +21,11 @@ namespace API.Controllers
            _context = context;
        }
        [HttpGet]
-       public async Task<ActionResult<Cart>> GetCart()
+       public async Task<ActionResult<CardDTO>> GetCart()
        {
            var cart = await GetOrCreateCart();
 
-           return cart;
+           return CartToDTO(cart);
        }
       [HttpPost]
       public async Task<ActionResult> AddItemToCart(int productId,int quantity)
@@ -34,9 +35,19 @@ namespace API.Controllers
         if(product==null) return BadRequest(new ProblemDetails{Title="Product not found"});
         cart.AddItem(product,quantity);
         var result = await _context.SaveChangesAsync();
-        if(result>0) return CreatedAtAction(nameof(GetCart),new {cartId=cart.CartId},cart);
+        if(result>0) return CreatedAtAction(nameof(GetCart),CartToDTO(cart));
         return BadRequest(new ProblemDetails{Title="Problem adding item to cart"});
       }
+
+      [HttpDelete("{productId}")]
+        public async Task<ActionResult> DeleteItemFromCart(int productId,int quantity)
+        {
+            var cart = await GetOrCreateCart();
+            cart.RemoveItem(productId,quantity);
+            var result = await _context.SaveChangesAsync();
+            if(result>0) return CreatedAtAction(nameof(GetCart),new {cartId=cart.CartId},cart);
+            return BadRequest(new ProblemDetails{Title="Problem removing item from cart"});
+        }
       private async Task<Cart> GetOrCreateCart()
       {
         
@@ -59,5 +70,24 @@ namespace API.Controllers
         }
         return cart;
       }
+
+
+    private CardDTO CartToDTO(Cart cart)
+    {
+        return new CardDTO
+        {
+            CartId = cart.CartId,
+            CustomerId = cart.CustomerId,
+            Items = cart.Items.Select(i => new CartItemDTO
+            {
+                ProductId = i.ProductId,
+                Name = i.Product.Name,
+                Description = i.Product.Description,
+                ImageUrl = i.Product.ImageUrl,
+                Price = i.Product.Price ?? 0,
+                Quantity = i.Quantity
+            }).ToList()
+        };
+    }
     }
 }

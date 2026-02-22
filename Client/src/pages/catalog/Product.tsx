@@ -1,8 +1,26 @@
-import { AddShoppingCart, Search} from "@mui/icons-material";
-import { Button, Card, CardActions, CardContent, CardMedia, Typography } from "@mui/material";
+import { AddShoppingCart, Search } from "@mui/icons-material";
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Typography,
+} from "@mui/material";
+
 import { Link } from "react-router";
+import agent from "../../api/requests";
+import { useState } from "react";
 
 function Product({ product }: { product: any }) {
+  const [loading, setLoading] = useState(false);
+  const handleAddItem = (productId: number) => {
+    setLoading(true);
+    agent.Cart.addItem(productId, 1)
+      .then((cart) => console.log(cart))
+      .catch((error) => console.log(error))
+      .finally(() => setLoading(false));
+  };
   return (
     <>
       <Card>
@@ -20,8 +38,25 @@ function Product({ product }: { product: any }) {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button variant="outlined" size="small" startIcon={<AddShoppingCart  color="success" />}>Add to Cart</Button>
-          <Button  component={Link} to={`/catalog/${product.id}`} variant="outlined" size="small" startIcon={<Search />} color="primary">View Details</Button>
+          <Button
+            loading={loading}
+            variant="outlined"
+            size="small"
+            startIcon={<AddShoppingCart color="success" />}
+            onClick={() => handleAddItem(product.id)}
+          >
+            Add to Cart
+          </Button>
+          <Button
+            component={Link}
+            to={`/catalog/${product.id}`}
+            variant="outlined"
+            size="small"
+            startIcon={<Search />}
+            color="primary"
+          >
+            View Details
+          </Button>
         </CardActions>
       </Card>
     </>

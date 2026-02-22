@@ -12,8 +12,9 @@ using Microsoft.Extensions.Logging;
 
 namespace API.Controllers
 {
+    [ApiController]
     [Route("/api/[controller]")]
-    public class CartController : Controller
+    public class CartController : ControllerBase
     {
        private readonly DataContext _context;
        public CartController(DataContext context)
@@ -27,8 +28,8 @@ namespace API.Controllers
 
            return CartToDTO(cart);
        }
-      [HttpPost]
-      public async Task<ActionResult> AddItemToCart(int productId,int quantity)
+      [HttpPost("{productId}")]
+       public async Task<ActionResult> AddItemToCart(int productId,int quantity)
       {
         var cart = await GetOrCreateCart();
         var product = await _context.Products.FindAsync(productId);

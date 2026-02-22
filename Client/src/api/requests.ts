@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { router } from "../router/Routes";
 
 axios.defaults.baseURL = "http://localhost:5094/api/";
+axios.defaults.withCredentials = true;
 
 axios.interceptors.response.use(
   (response) => response,
@@ -11,9 +12,9 @@ axios.interceptors.response.use(
     const { data, status } = error.response as AxiosResponse;
     switch (status) {
       case 400:
-        if(data.errors){
-          const modelErrors:string[]=[];
-          for(const key in data.errors){
+        if (data.errors) {
+          const modelErrors: string[] = [];
+          for (const key in data.errors) {
             modelErrors.push(data.errors[key]);
           }
           throw modelErrors.flat();
@@ -24,10 +25,10 @@ axios.interceptors.response.use(
         toast.error(data.title);
         break;
       case 404:
-        router.navigate("/not-found",{state:{error:data}});
+        router.navigate("/not-found", { state: { error: data } });
         break;
       case 500:
-        router.navigate("/server-error",{state:{error:data}});
+        router.navigate("/server-error", { state: { error: data } });
         break;
       default:
         toast.error("Something went wrong");
@@ -61,9 +62,18 @@ const Errors = {
   getValidationError: () => requests.get("error/validation-error"),
 };
 
+const Cart = {
+  get: () => requests.get("cart"),
+  addItem: (productId: number, quantity: number) =>
+    requests.post(`cart/${productId}?quantity=${quantity}`, {}),
+  deleteItem: (productId: number, quantity: number) =>
+    requests.delete(`cart/${productId}?quantity=${quantity}`),
+};
+
 const agent = {
   Catalog,
   Errors,
+  Cart,
 };
 
 export default agent;

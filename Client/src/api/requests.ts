@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { IProducts } from "../model/IProducts";
+import { ICart } from "../model/ICart";
 import { toast } from "react-toastify";
 import { router } from "../router/Routes";
 
@@ -63,7 +64,7 @@ const Errors = {
 };
 
 const Cart = {
-  get: () => requests.get("cart"),
+  get: () => requests.get<ICart>("cart"),
   addItem: (productId: number, quantity: number) =>
     requests.post(`cart/${productId}?quantity=${quantity}`, {}),
   deleteItem: (productId: number, quantity: number) =>

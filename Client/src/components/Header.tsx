@@ -74,7 +74,7 @@ function Header() {
             </List>
           </Box>
           <Box>
-            <IconButton size="large" sx={{ color: "inherit" }} edge="start">
+            <IconButton component={NavLink} to={'/cart'} size="large" sx={{ color: "inherit" }} edge="start">
               <Badge badgeContent={4} color="secondary">
                 <ShoppingCart />
               </Badge>

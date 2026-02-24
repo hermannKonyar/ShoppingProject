@@ -3,14 +3,12 @@ import agent from "../../api/requests";
 import { Box, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { ICart } from "../../model/ICart";
 import { AddShoppingCart, RemoveShoppingCart } from "@mui/icons-material";
+import { useCartContext } from "../../context/CartContext";
 
 export default function ShoppingCartPage() {
-    const [loading, setLoading] = useState(true);
-    const [cart, setCart] = useState<ICart | null>(null);
-    useEffect(() => {
-        agent.Cart.get().then((cart) => setCart(cart)).catch((error) => console.log(error)).finally(() => setLoading(false));
-    }, []);
-    if (loading) return <Typography>Loading...</Typography>;
+    const {cart, setCart} = useCartContext();
+    
+    
     if (!cart) return <Typography>Cart not found</Typography>;
   return (
     <TableContainer>

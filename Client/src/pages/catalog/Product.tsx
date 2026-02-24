@@ -11,13 +11,15 @@ import {
 import { Link } from "react-router";
 import agent from "../../api/requests";
 import { useState } from "react";
+import { useCartContext } from "../../context/CartContext";
 
 function Product({ product }: { product: any }) {
   const [loading, setLoading] = useState(false);
+  const {setCart} = useCartContext();
   const handleAddItem = (productId: number) => {
     setLoading(true);
     agent.Cart.addItem(productId, 1)
-      .then((cart) => console.log(cart))
+      .then((cart) => setCart(cart))
       .catch((error) => console.log(error))
       .finally(() => setLoading(false));
   };

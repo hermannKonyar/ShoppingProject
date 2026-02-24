@@ -66,7 +66,7 @@ const Errors = {
 const Cart = {
   get: () => requests.get<ICart>("cart"),
   addItem: (productId: number, quantity: number) =>
-    requests.post(`cart/${productId}?quantity=${quantity}`, {}),
+    requests.post<ICart>(`cart/${productId}?quantity=${quantity}`, {}),
   deleteItem: (productId: number, quantity: number) =>
     requests.delete(`cart/${productId}?quantity=${quantity}`),
 };

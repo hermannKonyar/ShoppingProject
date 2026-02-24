@@ -14,6 +14,7 @@ import {
 import { IProducts } from "../model/IProducts";
 import { ShoppingCart } from "@mui/icons-material";
 import { NavLink } from "react-router";
+import { useCartContext } from "../context/CartContext";
 
 interface Props {
   products: IProducts[];
@@ -55,6 +56,8 @@ const styles = {
 };
 
 function Header() {
+  const {cart} = useCartContext();
+  const itemCount = cart?.items.reduce((total, item) => total + item.quantity, 0);
   return (
     <>
       <AppBar position="static" sx={{ mb: 4 }}>
@@ -75,7 +78,7 @@ function Header() {
           </Box>
           <Box>
             <IconButton component={NavLink} to={'/cart'} size="large" sx={{ color: "inherit" }} edge="start">
-              <Badge badgeContent={4} color="secondary">
+              <Badge badgeContent={itemCount} color="secondary">
                 <ShoppingCart />
               </Badge>
             </IconButton>

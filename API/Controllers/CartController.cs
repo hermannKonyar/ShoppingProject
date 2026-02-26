@@ -46,7 +46,7 @@ namespace API.Controllers
             var cart = await GetOrCreateCart();
             cart.RemoveItem(productId,quantity);
             var result = await _context.SaveChangesAsync();
-            if(result>0) return CreatedAtAction(nameof(GetCart),new {cartId=cart.CartId},cart);
+            if(result>0) return Ok(CartToDTO(cart));
             return BadRequest(new ProblemDetails{Title="Problem removing item from cart"});
         }
       private async Task<Cart> GetOrCreateCart()

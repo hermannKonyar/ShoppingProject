@@ -68,7 +68,7 @@ const Cart = {
   addItem: (productId: number, quantity: number) =>
     requests.post<ICart>(`cart/${productId}?quantity=${quantity}`, {}),
   deleteItem: (productId: number, quantity: number) =>
-    requests.delete(`cart/${productId}?quantity=${quantity}`),
+    requests.delete<ICart>(`cart/${productId}?quantity=${quantity}`),
 };
 
 const agent = {
